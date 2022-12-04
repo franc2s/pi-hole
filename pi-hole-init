@@ -1,0 +1,28 @@
+Documentation
+https://github.com/pi-hole/docker-pi-hole/blob/master/README.md 
+https://github.com/pi-hole/docker-pi-hole/blob/master/examples/docker_run.sh
+I followed the example from docker_run.sh
+
+Prework
+ Setup the volumes
+    I set up a presistant volume for the local dns server and configuration.
+ As more than one container will end up using port 80, i changed the webadmin port to 5380. THIS STILL NEEDS TESTING.
+ Run docker
+
+docker run -d \
+	--name pihole \
+	-p 53:53/tcp -p 53:53/udp \
+	-p 5380:80 \
+	-e TZ="Europe/Madrid" \
+	-v "/var/run/docker.persistant/pi-hole/etc-pihole:/etc/pihole" \
+	-v "/var/run/docker.persistant/pi-hole/etc-dnsmasq.d:/etc/dnsmasq.d" \
+	--dns=127.0.0.1 --dns=1.1.1.1 \
+	--restart=unless-stopped \
+	--hostname pi.hole \
+	-e VIRTUAL_HOST="pi.hole" \
+	-e PROXY_LOCATION="pi.hole" \
+	-e FTLCONF_LOCAL_IPV4="192.168.0.15" \
+	pihole/pihole:latest
+
+Isues
+Web admin pòrt exposed on diluve.
